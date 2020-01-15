@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-demo-pod
+  labels:
+    name: k8s-demo
+    author: ananth
+spec:
+  containers:
+  - name: k8s-demo-app
+    image: ananthrs/hello-k8s:latest
+    ports:
+    - containerPort: 8080
