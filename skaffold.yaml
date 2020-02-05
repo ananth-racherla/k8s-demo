@@ -1,0 +1,27 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+metadata:
+  name: hello-world
+build:
+  artifacts:
+  - image: ananthrs/hello-k8s
+    context: .
+  local:
+    push: false
+  tagPolicy:
+    envTemplate:
+      template: "{{.IMAGE_NAME}}:latest"
+deploy:
+#  kubectl:
+#    manifests:
+#    - k8s/deployment.yaml
+#    - k8s/ingress.yaml
+#    - k8s/service.yaml
+  helm:
+    releases:
+    - name: hello-world-release
+      chartPath: helm/hello-k8s
+      namespace: demo
+      setValueTemplates:
+        image.tag: "latest"
+      recreatePods: true
