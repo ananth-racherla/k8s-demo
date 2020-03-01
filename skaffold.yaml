@@ -24,4 +24,3 @@ deploy:
       namespace: demo
       setValueTemplates:
         image.tag: "latest"
-      recreatePods: true
