@@ -41,6 +41,9 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
