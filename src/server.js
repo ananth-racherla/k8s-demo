@@ -1,13 +1,17 @@
-const http = require('http');
+
+const express = require('express');
 const os = require('os');
+const logger = require('./loggers/logger');
 
-console.log("Awesome node app starting...");
+const app = express();
+const port = 8080;
 
-var handler = function(request, response) {
-  console.log("Received request from " + request.connection.remoteAddress);
-  response.writeHead(200);
-  response.end("You've hit " +os.hostname() + "\n");
-};
+// Generic handler for all routes
+app.use((req, res) => {
+  logger.debug(`Request: ${req.method} ${req.url}`);
+  res.send(`You've hit ${os.hostname()}\n`);
+});
 
-var www = http.createServer(handler);
-www.listen(8080);
+app.listen(port, () => {
+  logger.debug(`Node app listening at http://localhost:${port}`)
+});
