@@ -2,13 +2,26 @@ FROM node:8.17.0-alpine3.11 as builder
 # Create app directory
 WORKDIR /usr/src/app
 
-# Add dependency file
-ADD ./src/package*.json ./
+# Install app dependencies before copying the source.
+# This ensures better utilization of docker layer caching
+COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# npm ci should be faster than npm install and would not overwrite the package*.json files.
+# only=production option would not install any devDependencies
+RUN npm ci --only=production
 
-# Add scripts
-ADD ./src/server.js /usr/src/app
+# Bundle app source
+COPY ./src/ ./src/
 
-ENTRYPOINT ["node", "server.js"]
+# Run the container as a nonroot user
+#RUN addgroup --gid 2000 --system neptune && adduser --uid 1001 --system --ingroup neptune neptune
+
+#USER neptune
+
+# App port
+EXPOSE 8080
+
+# Metrics port
+#EXPOSE 9999
+
+CMD [ "node", "./src/server.js" ]

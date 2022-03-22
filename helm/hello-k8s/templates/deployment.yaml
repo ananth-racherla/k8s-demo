@@ -20,6 +20,8 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "hello-k8s.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      annotations:
+        revision: {{ quote .Release.Revision }}        
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
